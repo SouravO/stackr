@@ -4,6 +4,7 @@ const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT, 10) || 587,
   secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -12,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 export async function sendOtpEmail({ to, otp, name }) {
   await transporter.sendMail({
-    from: `"Node Server" <${process.env.SMTP_USER}>`,
+    from: `"Node Server" <${process.env.FROM_EMAIL}>`,
     to,
     subject: 'Your OTP Code',
     text: `Hi ${name || 'User'},\n\nYour OTP code is: ${otp}\n\nThis code expires in ${parseInt(process.env.OTP_EXPIRY, 10) || 300} seconds.\n\nIf you did not request this, please ignore this email.`,
